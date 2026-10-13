@@ -1,0 +1,71 @@
+# 📄 ATS Resume Checker
+
+A Streamlit app that scores your resume for Applicant Tracking Systems (ATS) and tells you exactly how to improve it, powered by Google Gemini.
+
+## Features
+- Upload a resume as **PDF, DOCX or TXT** (max 5 MB)
+- Optional **job description** input for targeted keyword matching
+- **Overall ATS score (0-100)** plus a breakdown: keyword match, content quality, impact & metrics, formatting, structure
+- Strengths, missing keywords, formatting issues
+- Prioritized improvements (high / medium / low) and before/after bullet rewrites
+- Downloadable JSON report
+
+## How the score works
+Gemini rates five categories from 0-100. The app then computes the overall score itself using fixed weights
+(keywords 30%, content 25%, impact 20%, formatting 15%, structure 10%), so the number is consistent with the breakdown.
+This is an AI-based estimate, not the output of a real ATS. Treat it as guidance.
+
+## Run locally
+```bash
+git clone https://github.com/<your-username>/<your-repo>.git
+cd <your-repo>
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+Get a free API key at [Google AI Studio](https://aistudio.google.com/apikey), then provide it in one of these ways:
+
+1. **Environment variable**
+   ```bash
+   export GEMINI_API_KEY="your-key"     # Windows PowerShell: $env:GEMINI_API_KEY="your-key"
+   ```
+2. **Streamlit secrets file** `.streamlit/secrets.toml` (never commit this file):
+   ```toml
+   GEMINI_API_KEY = "your-key"
+   ```
+3. Or just paste the key into the sidebar when the app runs.
+
+Start the app:
+```bash
+streamlit run app.py
+```
+
+## Configuration
+| Name | Required | Description |
+|------|----------|-------------|
+| `GEMINI_API_KEY` | Yes | Your Google AI Studio key |
+| `GEMINI_MODEL` | No | Gemini model name. Default: `gemini-3.5-flash` (auto-falls back to `gemini-flash-latest` if unavailable) |
+
+## Deploy on Streamlit Community Cloud
+1. Push this repo to GitHub (`app.py`, `requirements.txt`, `README.md` in the repo root).
+2. Go to [share.streamlit.io](https://share.streamlit.io) and sign in with GitHub.
+3. Click **Create app**, choose the repo, branch `main`, and main file `app.py`.
+4. Open **Advanced settings** and paste into **Secrets**:
+   ```toml
+   GEMINI_API_KEY = "your-key"
+   ```
+5. Click **Deploy**.
+
+## Privacy
+Resume text is sent to the Gemini API for analysis. The app does not store resumes or write them to disk.
+
+## Limitations
+- Scanned/image-only resumes can't be read (an ATS can't read them either).
+- Layout problems (columns, graphics) are inferred from extracted text, so they may not be detected.
+- Very long resumes are truncated to ~15,000 characters.
+
+
+# --------------------------------------------------------------------------- #
+# Streamlit UI
+# --------------------------------------------------------------------------- #
